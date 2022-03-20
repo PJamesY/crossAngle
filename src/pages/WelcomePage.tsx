@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Navigate } from "react-router-dom";
 import { BASE_URL, END_POINT } from "../define/api";
 import MainLayout from "../components/layout/MainLayout";
 import useTimeout from "../hooks/useTimeout";
+import useFetch from "../hooks/useFetch";
+
+interface IWelcomeMsgResponse {
+  msg: string;
+}
 
 function WelcomePage() {
   const [msg, setMsg] = useState<string>("");
   const [move, setMove] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    fetch(`${BASE_URL}/${END_POINT.WELCOME_PAGE_MSG}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (isMounted) {
-          setMsg(data.data.msg);
-        }
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const { loading, error } = useFetch<IWelcomeMsgResponse>(
+    `${END_POINT.WELCOME_PAGE_MSG}`,
+    useCallback((data) => {
+      setMsg(data.msg);
+    }, [])
+  );
 
   useTimeout(() => setMove(true), 2000);
 

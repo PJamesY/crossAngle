@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { BASE_URL, END_POINT } from "../define/api";
+import React, { useCallback, useState } from "react";
+import { END_POINT } from "../define/api";
 import MainLayout from "../components/layout/MainLayout";
 import { Link } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 const enum SURVEY_TYPE {
   DEFAULT,
   OX,
   TEXT,
+}
+
+interface ISurveyResponse {
+  surveyMsg: string;
+  type: string;
 }
 
 function SurveyPage() {
@@ -15,12 +21,24 @@ function SurveyPage() {
   const [selected, setSelected] = useState("yes");
   const [text, setText] = useState("");
   const [showMovePageButton, setShowMovePageButton] = useState(false);
+  const setData = useCallback((data) => {
+    setMsg(data.surveyMsg);
+    if (data.type === "ox") {
+      setSurveyType(SURVEY_TYPE.OX);
+    } else {
+      setSurveyType(SURVEY_TYPE.TEXT);
+    }
+  }, []);
+  const { loading, error } = useFetch<ISurveyResponse>(
+    `${END_POINT.SURVEY_PAGE_QUESTION}`,
+    setData
+  );
 
-  const changeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeYesNoOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelected(e.target.id);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSurveyTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.currentTarget.value);
   };
 
@@ -38,7 +56,7 @@ function SurveyPage() {
               id="yes"
               name="option"
               checked={selected === "yes"}
-              onChange={changeOption}
+              onChange={changeYesNoOption}
             />
             O
           </label>
@@ -48,7 +66,7 @@ function SurveyPage() {
               id="no"
               name="option"
               checked={selected === "no"}
-              onChange={changeOption}
+              onChange={changeYesNoOption}
             />
             X
           </label>
@@ -56,30 +74,15 @@ function SurveyPage() {
       );
     } else if (surveyType === SURVEY_TYPE.TEXT) {
       return (
-        <input value={text} aria-label="survey-input" onChange={handleChange} />
+        <input
+          value={text}
+          aria-label="survey-input"
+          onChange={handleSurveyTextChange}
+        />
       );
     }
     return <></>;
   };
-
-  useEffect(() => {
-    let isMounted = true;
-    fetch(`${BASE_URL}/${END_POINT.SURVEY_PAGE_QUESTION}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (isMounted) {
-          setMsg(data.data.surveyMsg);
-          if (data.data.type === "ox") {
-            setSurveyType(SURVEY_TYPE.OX);
-          } else {
-            setSurveyType(SURVEY_TYPE.TEXT);
-          }
-        }
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   return (
     <MainLayout>

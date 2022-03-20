@@ -12,14 +12,15 @@ function useFetch<T>(url: string, callBack: (data: T) => void) {
       .then((data) => {
         if (isMounted) {
           callBack(data.data);
+          setLoading(false);
         }
       })
-      .catch((e) => setError(e))
-      .finally(() => setLoading(false));
+      .catch((e) => setError(e));
+
     return () => {
       isMounted = false;
     };
-  }, [callBack, url]);
+  }, [url, callBack]);
 
   return { loading, error };
 }
