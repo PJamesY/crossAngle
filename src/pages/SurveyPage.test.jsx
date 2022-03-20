@@ -60,6 +60,20 @@ describe("<SurveyPage/>", () => {
     });
   });
 
+  describe("Text 질문 일때", () => {
+    it("설문지 답변 입력 할수 있는 input tag 생성", async () => {
+      mockAPI(surveyTextResponse);
+      render(
+        <BrowserRouter>
+          <SurveyPage />
+        </BrowserRouter>
+      );
+      const input = await screen.findByLabelText("survey-input");
+      fireEvent.change(input, { target: { value: "크로스앵글 화이팅하세요" } });
+      expect(input.value).toBe("크로스앵글 화이팅하세요");
+    });
+  });
+
   it("submit 버튼 눌렀을때 다음 페이지 넘어가는 버튼 생성되어야 한다", () => {
     render(
       <BrowserRouter>

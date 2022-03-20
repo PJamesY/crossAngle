@@ -13,11 +13,15 @@ function SurveyPage() {
   const [surveyType, setSurveyType] = useState(SURVEY_TYPE.DEFAULT);
   const [msg, setMsg] = useState<string>("Default Msg");
   const [selected, setSelected] = useState("yes");
+  const [text, setText] = useState("");
   const [showMovePageButton, setShowMovePageButton] = useState(false);
 
   const changeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("e", e.target.id);
     setSelected(e.target.id);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.currentTarget.value);
   };
 
   const submitSurvey = () => {
@@ -51,7 +55,9 @@ function SurveyPage() {
         </div>
       );
     } else if (surveyType === SURVEY_TYPE.TEXT) {
-      return <div>text</div>;
+      return (
+        <input value={text} aria-label="survey-input" onChange={handleChange} />
+      );
     }
     return <></>;
   };
@@ -77,9 +83,7 @@ function SurveyPage() {
 
   return (
     <MainLayout>
-      {/* {surveyType === } */}
       <h2>{msg}</h2>
-
       {renderSurveyQuestion()}
       <button onClick={submitSurvey}>제출</button>
       {showMovePageButton ? <Link to="/welcome">환영페이지 이동</Link> : <></>}
