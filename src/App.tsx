@@ -8,11 +8,13 @@ import WelcomePage from "./pages/WelcomePage";
 function App() {
   return (
     <Router>
+      <header>Cross Angle</header>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
       </Routes>
+      <footer>Contact Us</footer>
     </Router>
   );
 }
