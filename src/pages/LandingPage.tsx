@@ -4,6 +4,7 @@ import MainLayout from "../components/layout/MainLayout";
 import { END_POINT } from "../define/api";
 import "./LandingPage.css";
 import useFetch from "../hooks/useFetch";
+import PageMoveBtn from "../components/button/PageMoveBtn";
 
 interface ILandingMsgResponse {
   msg: string;
@@ -12,13 +13,13 @@ interface ILandingMsgResponse {
 function LandingPage() {
   const [msg, setMsg] = useState<string>("");
 
-  const setData = useCallback((data) => {
+  const updateLadingPageMsg = useCallback((data) => {
     setMsg(data.msg);
   }, []);
 
   const { loading, error } = useFetch<ILandingMsgResponse>(
     `${END_POINT.LANDING_PAGE_MSG}`,
-    setData
+    updateLadingPageMsg
   );
 
   if (loading) {
@@ -31,10 +32,12 @@ function LandingPage() {
 
   return (
     <MainLayout>
-      <h1 className="landing-page-msg">{error ? error : msg}</h1>
-      <Link to="/survey" className="link">
-        설문지 이동
-      </Link>
+      <h2 className="landing-page-msg">{error ? error : msg}</h2>
+      <PageMoveBtn>
+        <Link to="/survey" className="link">
+          설문지 이동
+        </Link>
+      </PageMoveBtn>
     </MainLayout>
   );
 }
