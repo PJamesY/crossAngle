@@ -14,7 +14,7 @@ function App() {
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
       </Routes>
-      <footer>Contact Us</footer>
+      <footer>Footer</footer>
     </Router>
   );
 }
