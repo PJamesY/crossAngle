@@ -3,6 +3,10 @@ import { END_POINT } from "../define/api";
 import MainLayout from "../components/layout/MainLayout";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
+import SurveyOX from "../components/survey/SurveyOX";
+import SurveyText from "../components/survey/SurveyText";
+import PageMoveBtn from "../components/button/PageMoveBtn";
+import "./SurveyPage.css";
 
 const enum SURVEY_TYPE {
   DEFAULT,
@@ -17,12 +21,12 @@ interface ISurveyResponse {
 
 function SurveyPage() {
   const [surveyType, setSurveyType] = useState(SURVEY_TYPE.DEFAULT);
-  const [msg, setMsg] = useState<string>("Default Msg");
+  const [question, setQuestion] = useState<string>("Default Msg");
   const [selected, setSelected] = useState("yes");
   const [text, setText] = useState("");
   const [showMovePageButton, setShowMovePageButton] = useState(false);
   const setData = useCallback((data) => {
-    setMsg(data.surveyMsg);
+    setQuestion(data.surveyMsg);
     if (data.type === "ox") {
       setSurveyType(SURVEY_TYPE.OX);
     } else {
@@ -34,62 +38,45 @@ function SurveyPage() {
     setData
   );
 
-  const changeYesNoOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelected(e.target.id);
-  };
-
-  const handleSurveyTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.currentTarget.value);
-  };
-
   const submitSurvey = () => {
     setShowMovePageButton(true);
   };
 
-  const renderSurveyQuestion = () => {
+  const renderSurveyContent = () => {
     if (surveyType === SURVEY_TYPE.OX) {
-      return (
-        <div className="option">
-          <label htmlFor="yes">
-            <input
-              type="radio"
-              id="yes"
-              name="option"
-              checked={selected === "yes"}
-              onChange={changeYesNoOption}
-            />
-            O
-          </label>
-          <label htmlFor="no">
-            <input
-              type="radio"
-              id="no"
-              name="option"
-              checked={selected === "no"}
-              onChange={changeYesNoOption}
-            />
-            X
-          </label>
-        </div>
-      );
+      return <SurveyOX selected={selected} setSelected={setSelected} />;
     } else if (surveyType === SURVEY_TYPE.TEXT) {
-      return (
-        <input
-          value={text}
-          aria-label="survey-input"
-          onChange={handleSurveyTextChange}
-        />
-      );
+      return <SurveyText text={text} setText={setText} />;
     }
     return <></>;
   };
 
+  if (loading) {
+    return (
+      <MainLayout>
+        <h2>로딩중,,</h2>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
-      <h2>{msg}</h2>
-      {renderSurveyQuestion()}
-      <button onClick={submitSurvey}>제출</button>
-      {showMovePageButton ? <Link to="/welcome">환영페이지 이동</Link> : <></>}
+      <section className="survey-section">
+        <h2 className="survey-question">{!error ? question : error}</h2>
+        {renderSurveyContent()}
+        <button className="survey-submit-btn" onClick={submitSurvey}>
+          제출
+        </button>
+      </section>
+      <section className="move-page-btn-section">
+        {showMovePageButton ? (
+          <PageMoveBtn>
+            <Link to="/welcome">환영페이지 이동</Link>
+          </PageMoveBtn>
+        ) : (
+          <></>
+        )}
+      </section>
     </MainLayout>
   );
 }

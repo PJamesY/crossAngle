@@ -1,4 +1,5 @@
 import React from "react";
+import "./SurveyOX.css";
 
 interface SurveyOXProps {
   selected: string;

@@ -1,0 +1,26 @@
+.survey-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 200px;
+  position: absolute;
+  margin-bottom: 200px;
+}
+
+.survey-question {
+  font-size: 1.3rem;
+}
+
+.survey-submit-btn {
+  background-color: rgb(192, 139, 241);
+  width: 80px;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  color: black;
+}
+
+.move-page-btn-section {
+  margin-bottom: -200px;
+}
