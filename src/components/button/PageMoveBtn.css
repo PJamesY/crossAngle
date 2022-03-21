@@ -1,0 +1,14 @@
+.page-move-btn {
+  background-color: rgb(127, 8, 238);
+  border-radius: 10px;
+  width: 120px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
