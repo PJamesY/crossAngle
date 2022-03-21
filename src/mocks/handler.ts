@@ -14,15 +14,15 @@ const handlers = [
   }),
   // 설문 페이지 mock api
   rest.get(`${BASE_URL}/${END_POINT.SURVEY_PAGE_QUESTION}`, (_, res, ctx) => {
-    const idx = Math.round(Math.random()); // 0 또는 1
-    const datas = [
+    const idxBetweenZeroToOne = Math.round(Math.random()); // 0 또는 1
+    const samples = [
       { type: "ox", surveyMsg: "크로스앵글을 찾으신 경로가 블로그인가요?" },
       {
         type: "text",
         surveyMsg: "크로스앵글 피드백을 남겨주세요",
       },
     ];
-    const data = datas[idx];
+    const data = samples[idxBetweenZeroToOne];
 
     return res(
       ctx.json({
