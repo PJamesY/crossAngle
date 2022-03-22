@@ -74,13 +74,13 @@ describe("<SurveyPage/>", () => {
     });
   });
 
-  it("submit 버튼 눌렀을때 다음 페이지 넘어가는 버튼 생성되어야 한다", () => {
+  it("submit 버튼 눌렀을때 다음 페이지 넘어가는 버튼 생성되어야 한다", async () => {
     render(
       <BrowserRouter>
         <SurveyPage />
       </BrowserRouter>
     );
-    const submitButton = screen.getByText("제출");
+    const submitButton = await screen.findByText("제출");
     expect(submitButton).toBeInTheDocument();
     fireEvent.click(submitButton);
     const moveToWelcomPageButton = screen.getByText("환영페이지 이동");
