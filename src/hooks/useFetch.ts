@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../define/api";
 
-function useFetch<T>(url: string, callBack: (data: T) => void) {
+function useFetch<T>(endPoint: string, callBack: (data: T) => void) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
-    fetch(`${BASE_URL}/${url}`)
+    fetch(`${BASE_URL}/${endPoint}`)
       .then((response) => response.json())
       .then((data) => {
         if (isMounted) {
@@ -20,7 +20,7 @@ function useFetch<T>(url: string, callBack: (data: T) => void) {
     return () => {
       isMounted = false;
     };
-  }, [url, callBack]);
+  }, [endPoint, callBack]);
 
   return { loading, error };
 }
